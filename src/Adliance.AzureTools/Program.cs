@@ -23,6 +23,8 @@ namespace Adliance.AzureTools
                 MirrorStorageToLocalParameters,
                 MirrorLocalToLocalParameters,
                 MirrorLocalToStorageParameters,
+                ExportDatabaseParameters,
+                ImportDatabaseParameters,
                 CopyDatabaseParameters>(args);
             await parserResult.WithParsedAsync<MirrorStorageToStorageParameters>(async p =>
             {
@@ -42,6 +44,16 @@ namespace Adliance.AzureTools
             await parserResult.WithParsedAsync<MirrorLocalToStorageParameters>(async p =>
             {
                 await new MirrorLocalToStorageService(p).Run();
+                Exit(ExitCodeOk);
+            });
+            await parserResult.WithParsedAsync<ExportDatabaseParameters>(async p =>
+            {
+                await new ExportDatabaseService(p).Run();
+                Exit(ExitCodeOk);
+            });
+            await parserResult.WithParsedAsync<ImportDatabaseParameters>(async p =>
+            {
+                await new ImportDatabaseService(p).Run();
                 Exit(ExitCodeOk);
             });
             await parserResult.WithParsedAsync<CopyDatabaseParameters>(async p =>
