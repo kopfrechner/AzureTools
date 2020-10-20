@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Adliance.AzureTools.DatabaseTools.Parameters;
@@ -54,12 +52,12 @@ namespace Adliance.AzureTools.DatabaseTools
                 else
                 {
                     Console.WriteLine($"Downloading database to \"{fileName}\" ...");
-                    DownloadDatabase(_parameters.Source, fileName);
+                    SqlPackageAdapter.ExportDatabase(_parameters.Source, fileName);
                 }
 
                 var temporaryDbName = targetDbName + "_" + Guid.NewGuid();
                 Console.WriteLine($"Restoring to temporary database \"{temporaryDbName}\" ...");
-                RestoreDatabase(_parameters.Target.Replace(targetDbName, temporaryDbName), fileName);
+                SqlPackageAdapter.ImportDatabase(_parameters.Target.Replace(targetDbName, temporaryDbName), fileName);
 
                 await using (var connection = new SqlConnection(_parameters.Target.Replace(targetDbName, "master")))
                 {
@@ -154,56 +152,7 @@ namespace Adliance.AzureTools.DatabaseTools
                 return await command.ExecuteScalarAsync();
             }
         }
-
-        private void DownloadDatabase(string connectionString, string fileName)
-        {
-            RunSqlPackage(
-                "/Action:Export",
-                $" /TargetFile:\"{fileName}\"",
-                $" /SourceConnectionString:\"{connectionString}\"");
-        }
-
-        private void RestoreDatabase(string connectionString, string fileName)
-        {
-            RunSqlPackage(
-                "/Action:Import",
-                $" /SourceFile:\"{fileName}\"",
-                $" /TargetConnectionString:\"{connectionString}\"");
-        }
-
-        private void RunSqlPackage(params string[] arguments)
-        {
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase ?? "";
-            var assemblyPath = Uri.UnescapeDataString(new UriBuilder(codeBase).Path);
-            var sqlPackagePath = new FileInfo(Path.Combine(Path.GetDirectoryName(assemblyPath) ?? "", "CopyDatabase/sqlpackage/sqlpackage.exe"));
-
-            if (!sqlPackagePath.Exists)
-            {
-                throw new Exception($"{sqlPackagePath.FullName} does not exist.");
-            }
-
-            var pi = new ProcessStartInfo(sqlPackagePath.FullName)
-            {
-                Arguments = string.Join(" ", arguments)
-            };
-
-            var currentConsoleColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            var process = Process.Start(pi);
-            if (process == null)
-            {
-                throw new Exception("Process is null.");
-            }
-
-            process.WaitForExit();
-            Console.ForegroundColor = currentConsoleColor;
-
-            if (process.ExitCode != 0)
-            {
-                throw new Exception($"sqlpackage failed (exit code {process.ExitCode}.");
-            }
-        }
-
+        
         private string FindDatabaseName(string connectionString)
         {
             var match = Regex.Match(connectionString, @"[ ;]*Initial Catalog[ ]*\=(.*?)[;$]", RegexOptions.IgnoreCase);
