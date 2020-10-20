@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace Adliance.AzureTools.CopyDatabase.Parameters
+namespace Adliance.AzureTools.DatabaseTools.Parameters
 {
     [Verb("copy-database", HelpText = "Copies an existing database (structure and data) to another one. If the target database already exists, it will be overwritten. Please note that this uses SqlPackage and currently only works on Windows.")]
     public class CopyDatabaseParameters

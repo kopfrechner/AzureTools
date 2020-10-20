@@ -5,9 +5,9 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Adliance.AzureTools.CopyDatabase.Parameters;
+using Adliance.AzureTools.DatabaseTools.Parameters;
 
-namespace Adliance.AzureTools.CopyDatabase
+namespace Adliance.AzureTools.DatabaseTools
 {
     public class CopyDatabaseService
     {

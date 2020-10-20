@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Adliance.AzureTools.CopyDatabase;
-using Adliance.AzureTools.CopyDatabase.Parameters;
+using Adliance.AzureTools.DatabaseTools;
+using Adliance.AzureTools.DatabaseTools.Parameters;
 using Adliance.AzureTools.MirrorStorage;
 using Adliance.AzureTools.MirrorStorage.Parameters;
 using CommandLine;
