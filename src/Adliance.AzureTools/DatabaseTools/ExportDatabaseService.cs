@@ -27,8 +27,10 @@ namespace Adliance.AzureTools.DatabaseTools
                 if (!_parameters.Force && targetFileInfo.Exists)
                 {
                     Console.WriteLine($"File \"{targetFileInfo.FullName}\" exists. Use --force to overwrite existing bacpac.");
-                    return "";
+                    return targetFileInfo.FullName;
                 }
+
+                targetFileName = targetFileInfo.FullName;
                 
                 Console.WriteLine($"Downloading database to \"{targetFileName}\" ...");
                 SqlPackageAdapter.ExportDatabase(_parameters.Source, targetFileName);
