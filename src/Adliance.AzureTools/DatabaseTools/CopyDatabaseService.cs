@@ -31,7 +31,7 @@ namespace Adliance.AzureTools.DatabaseTools
             }
         }
 
-        public ExportDatabaseParameters ExportDatabaseParametersFromCopyDatabaseParameters(CopyDatabaseParameters parameters)
+        private ExportDatabaseParameters ExportDatabaseParametersFromCopyDatabaseParameters(CopyDatabaseParameters parameters)
         {
             return new ExportDatabaseParameters
             {
@@ -40,7 +40,7 @@ namespace Adliance.AzureTools.DatabaseTools
             };
         } 
         
-        public ImportDatabaseParameters ImportDatabaseParametersFromCopyDatabaseParameters(CopyDatabaseParameters parameters, string bacpacPath)
+        private ImportDatabaseParameters ImportDatabaseParametersFromCopyDatabaseParameters(CopyDatabaseParameters parameters, string bacpacPath)
         {
             return new ImportDatabaseParameters
             { 

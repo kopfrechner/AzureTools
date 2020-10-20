@@ -43,7 +43,7 @@ namespace Adliance.AzureTools.DatabaseTools
             return await Task.FromResult(targetFileName);
         }
 
-        public string FindTargetFilePath(string parametersTarget, string sourceDbName)
+        private string FindTargetFilePath(string parametersTarget, string sourceDbName)
         {
             var noTargetNameProvided = string.IsNullOrEmpty(parametersTarget);
             if (noTargetNameProvided)
